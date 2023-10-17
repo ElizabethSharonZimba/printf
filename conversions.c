@@ -1,6 +1,5 @@
 #include "main.h"
 
-
 unsigned int convert_sbase(buffer_t *output, long int num, char *base,
 		unsigned char flags, int wid, int prec);
 unsigned int convert_ubase(buffer_t *output,
@@ -8,19 +7,22 @@ unsigned int convert_ubase(buffer_t *output,
 		unsigned char flags, int wid, int prec);
 
 /**
- * convert_sbase - Converts long to base then stores
- * @output: buffer_t that has char array
- * @num: long to be converted
- * @base: str that has base to convert to
- * @flags: modifiers
- * @wid: modifier
- * @acc: modifier
- * Return: num of bytes stored to the buffer
+ * convert_sbase - Converts a signed long to an inputted base and stores
+ *                 the result to a buffer contained in a struct.
+ * @output: A buffer_t struct containing a character array.
+ * @num: A signed long to be converted.
+ * @base: A pointer to a string containing the base to convert to.
+ * @flags: Flag modifiers.
+ * @wid: A width modifier.
+ * @prec: A precision modifier.
+ *
+ * Return: The number of bytes stored to the buffer.
  */
-unsigned int convert_sbase(buffer_t *output, long int num, char *base, unsigned char flags, int wid, int acc)
+unsigned int convert_sbase(buffer_t *output, long int num, char *base,
+		unsigned char flags, int wid, int prec)
 {
 	int size;
-	char digi, pad = '0';
+	char digit, pad = '0';
 	unsigned int ret = 1;
 
 	for (size = 0; *(base + size);)
@@ -28,11 +30,11 @@ unsigned int convert_sbase(buffer_t *output, long int num, char *base, unsigned 
 
 	if (num >= size || num <= -size)
 		ret += convert_sbase(output, num / size, base,
-				flags, wid - 1, acc - 1);
+				flags, wid - 1, prec - 1);
 
 	else
 	{
-		for (; acc > 1; acc--, wid--)
+		for (; prec > 1; prec--, wid--)
 			ret += _memcpy(output, &pad, 1);
 
 		if (NEG_FLAG == 0)
@@ -43,43 +45,45 @@ unsigned int convert_sbase(buffer_t *output, long int num, char *base, unsigned 
 		}
 	}
 
-	digi = base[(num < 0 ? -1 : 1) * (num % size)];
-	_memcpy(output, &digi, 1);
+	digit = base[(num < 0 ? -1 : 1) * (num % size)];
+	_memcpy(output, &digit, 1);
 
 	return (ret);
 }
 
 /**
- * convert_ubase - Con unsigned long to an inputted base
- * @output: buffer_t struct that has char array
- * @num: unsigned long conversion
- * @base: str that has the base to convert to
- * @flags: modifiers
- * @wid: wid modifier
- * @acc: modifier
+ * convert_ubase - Converts an unsigned long to an inputted base and
+ *                 stores the result to a buffer contained in a struct.
+ * @output: A buffer_t struct containing a character array.
+ * @num: An unsigned long to be converted.
+ * @base: A pointer to a string containing the base to convert to.
+ * @flags: Flag modifiers.
+ * @wid: A width modifier.
+ * @prec: A precision modifier.
  *
- * Return: num of bytes stored to the buffer
+ * Return: The number of bytes stored to the buffer.
  */
-unsigned int convert_ubase(buffer_t *output, unsigned long int num, char *base, unsigned char flags, int wid, int acc)
+unsigned int convert_ubase(buffer_t *output, unsigned long int num, char *base,
+		unsigned char flags, int wid, int prec)
 {
 	unsigned int size, ret = 1;
-	char digi, pad = '0', *lead = "0x";
+	char digit, pad = '0', *lead = "0x";
 
 	for (size = 0; *(base + size);)
 		size++;
 
 	if (num >= size)
 		ret += convert_ubase(output, num / size, base,
-				flags, wid - 1, acc - 1);
+				flags, wid - 1, prec - 1);
 
 	else
 	{
 		if (((flags >> 5) & 1) == 1)
 		{
 			wid -= 2;
-			accu -= 2;
+			prec -= 2;
 		}
-		for (; acc > 1; acc--, wid--)
+		for (; prec > 1; prec--, wid--)
 			ret += _memcpy(output, &pad, 1);
 
 		if (NEG_FLAG == 0)
@@ -92,8 +96,8 @@ unsigned int convert_ubase(buffer_t *output, unsigned long int num, char *base, 
 			ret += _memcpy(output, lead, 2);
 	}
 
-	digi = base[(num % size)];
-	_memcpy(output, &digi, 1);
+	digit = base[(num % size)];
+	_memcpy(output, &digit, 1);
 
 	return (ret);
 }

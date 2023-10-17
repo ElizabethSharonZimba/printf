@@ -1,110 +1,17 @@
 #ifndef MAIN_H
 #define MAIN_H
-
-#include <limits.h>
 #include <stdarg.h>
-#include <stdlib.h>
-#include <unistd.h>
-/* Flag Modifier */
-#define PLUS 1
-#define SPACE 2
-#define HASH 4
-#define ZERO 8
-#define NEG 16
-#define PLUS_FLAG (flags & 1)
-#define SPACE_FLAG ((flags >> 1) & 1)
-#define HASH_FLAG ((flags >> 2) & 1)
-#define ZERO_FLAG ((flags >> 3) & 1)
-#define NEG_FLAG ((flags >> 4) & 1)
 
-/* Sizes*/
-#define SHORT 1
-#define LONG 2
+/*Structs*/
+/*Typedefs*/
+/*Prototypes*/
 
-/**
- * struct buffer_s -  buffer struct
- * @buffer: pointer to char array
- * @start: start of buffer
- * @len: length of str
- */
-typedef struct buffer_s
-{
-	char *buffer;
-	char *start;
-	unsigned int len;
-} buffer_t;
-
-/**
- * struct converter_s - converter struct
- * @specifier: conversion specifier
- * @func: conversion function
- */
-typedef struct converter_s
-{
-	unsigned char specifier;
-	unsigned int (*func)(va_list, buffer_t *,
-	unsigned char, int, int, unsigned char);
-} converter_t;
-
-/**
- * struct flag_s - flags struct
- * @flag: char flag
- * @value: value of the flag
- */
-typedef struct flag_s
-{
-	unsigned char flag;
-	unsigned char value;
-} flag_t;
-
-int to_printf(const char *format, ...);
-void write_buffer(char buffer[], int *buff_ind);
-/* Convert */
-unsigned int convert_sbase(buffer_t *output, long int num, char *base, unsigned char flags, int wid, int acc);
-unsigned int convert_ubase(buffer_t *output, unsigned long int num, char *base, unsigned char flags, int wid, int acc);
-unsigned int convert_c(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_s(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_di(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_percent(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_b(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_u(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_o(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_x(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_X(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_S(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_p(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_r(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-unsigned int convert_R(va_list args, buffer_t *output,
-		unsigned char flags, int wid, int acc, unsigned char len);
-
-/* Handlers */
-unsigned char handle_flags(const char *flags, char *index);
-unsigned char handle_length(const char *modifier, char *index);
-int handle_width(va_list args, const char *modifier, char *index);
-int handle_precision(va_list args, const char *modifier, char *index);
-unsigned int (*handle_specifiers(const char *specifier))(va_list, buffer_t *,
-		unsigned char, int, int, unsigned char);
-
-
-unsigned int write_width(buffer_t *output, unsigned int printed,unsigned char flags, int wid);
-unsigned int write_string_width(buffer_t *output,unsigned char flags, int wid, int acc, int size);
-unsigned int write_neg_width(buffer_t *output, unsigned int printed,unsigned char flags, int wid);
-buffer_t *init_buffer(void);
-void free_buffer(buffer_t *output);
-unsigned int _memcpy(buffer_t *output, const char *src, unsigned int n);
-unsigned int convert_sbase(buffer_t *output, long int num, char *base,unsigned char flags, int wid, int acc);
-unsigned int convert_ubase(buffer_t *output, unsigned long int num, char *base,unsigned char flags, int wid, int acc);
-
+int _putchar(char c, int *k);
+void _puts(char *str, int *k);
+int _printf(const char *format, ...);
+void _print_number(int n, int *k);
+void _rev_string(char *s, int *k);
+int _strlen(char *s);
+void _print_binary(int n, int *k);
+void _rot13(char *s, int *k);
 #endif
